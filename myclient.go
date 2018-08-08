@@ -9,9 +9,11 @@ import (
 	"net"
 	"os"
 	"time"
+        "strconv"
+
 )
 
-var port = "0.0.0.0:9001"
+var port = "10.254.254.1:9001"
 
 func nextTime(rate float64) float64 {
 	return -1 * math.Log(1.0-mrand.Float64()) / rate

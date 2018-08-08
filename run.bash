@@ -14,16 +14,17 @@ rate=$5
 mkdir $result_path/$rate
 
 pkill myclient
-#ssh scc@$2 "pkill my_quic_server"
-#sleep 2
-#ssh scc@$2 "go run /home/scc/work/src/github.com/lucas-clemente/quic-go/example/echo/my_quic_server.go &"
+ssh scc@$2 "pkill my_server"
+sleep 2
+ssh -f scc@$2 "export GOPATH=$HOME/work; export PATH=$PATH:/usr/local/go/bin; go run /home/scc/work/src/github.com/sarsanaee/GoWorkloadGenerator/myserver.go &"
+
 
 sleep 2
 
 for i in `seq 1 $1`;
 do
 	echo $i
-	go run myclient.go $rate > $result_path/$rate/$i.log &
+	go run myclient.go $rate > $result_path/$rate/$i\_$1.log &
 done
 
 sleep $4
@@ -32,4 +33,9 @@ sleep $4
 
 pkill myclient
 ssh scc@$2 "pkill myserver"
+
+
+echo "" > $result_path/$rate/latency_tcp_$rate\_$1.txt
+
+cat $result_path/$rate/*.log > $result_path/$rate/latency_tcp_$rate\_$1.txt
 
