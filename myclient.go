@@ -18,13 +18,18 @@ func nextTime(rate float64) float64 {
 }
 
 func main() {
+
+        args := os.Args[1:]
+        rate_int, err := strconv.Atoi(args[0])
+	var rate float64 = float64(rate_int)
+
 	conn, err := net.Dial("tcp", port)
 	if err != nil {
 		fmt.Println("ERROR", err)
 		os.Exit(1)
 	}
 
-	var my_random_number float64 = nextTime(1000) * 1000000
+	var my_random_number float64 = nextTime(rate) * 1000000
 	var my_random_int int = int(my_random_number)
 	var int_message int64 = time.Now().UnixNano()
 	byte_message := make([]byte, 8)

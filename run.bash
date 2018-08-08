@@ -1,23 +1,35 @@
 #!/bin/bash
 
-result_path=$HOME/Documents/quic_results/tcp
 
+if [ "$#" -ne 5 ]; then
+    echo "Illegal number of parameters"
+    echo "./run <number_of_clients> <server_ip> <results_path> <experiments_time> <rate>"
+    exit 1
+fi
 
-pkill myserver
+#result_path=$HOME/quic_results/quic
+result_path=$3
+rate=$5
+
+mkdir $result_path/$rate
+
 pkill myclient
-
-go run myserver.go &
+#ssh scc@$2 "pkill my_quic_server"
+#sleep 2
+#ssh scc@$2 "go run /home/scc/work/src/github.com/lucas-clemente/quic-go/example/echo/my_quic_server.go &"
 
 sleep 2
 
 for i in `seq 1 $1`;
 do
-	go run myclient.go > $result_path/$i.log &
+	echo $i
+	go run myclient.go $rate > $result_path/$rate/$i.log &
 done
 
-sleep 20
+sleep $4
 
 
 
-pkill myserver
 pkill myclient
+ssh scc@$2 "pkill myserver"
+
