@@ -21,6 +21,9 @@ ssh -f scc@$2 "export GOPATH=$HOME/work; export PATH=$PATH:/usr/local/go/bin; go
 
 sleep 2
 
+rm $result_path/$rate/*.log #removing current logs
+
+
 for i in `seq 1 $1`;
 do
 	echo $i
