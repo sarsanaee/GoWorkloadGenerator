@@ -8,9 +8,8 @@ import (
 	mrand "math/rand"
 	"net"
 	"os"
+	"strconv"
 	"time"
-        "strconv"
-
 )
 
 var port = "10.254.254.1:9001"
@@ -21,8 +20,8 @@ func nextTime(rate float64) float64 {
 
 func main() {
 
-        args := os.Args[1:]
-        rate_int, err := strconv.Atoi(args[0])
+	args := os.Args[1:]
+	rate_int, err := strconv.Atoi(args[0])
 	var rate float64 = float64(rate_int)
 
 	conn, err := net.Dial("tcp", port)
@@ -48,7 +47,6 @@ func main() {
 			}
 
 			last := int64(binary.LittleEndian.Uint64(buf))
-
 			fmt.Println((now - last) / 1000)
 		}
 		return
@@ -56,6 +54,8 @@ func main() {
 	}(conn)
 
 	for true {
+		my_random_number = nextTime(rate) * 1000000
+		my_random_int = int(my_random_number)
 		time.Sleep(time.Microsecond * time.Duration(my_random_int))
 		int_message = time.Now().UnixNano()
 		binary.LittleEndian.PutUint64(byte_message, uint64(int_message))
