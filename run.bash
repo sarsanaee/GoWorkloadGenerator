@@ -14,9 +14,9 @@ rate=$5
 mkdir $result_path/$rate
 
 pkill myclient
-ssh scc@$2 "pkill my_server"
+ssh alireza@$2 "pkill my_server"
 sleep 2
-ssh -f scc@$2 "export GOPATH=$HOME/work; export PATH=$PATH:/usr/local/go/bin; go run /home/scc/work/src/github.com/sarsanaee/GoWorkloadGenerator/myserver.go &"
+ssh -f alireza@$2 "export GOPATH=$HOME/work; export PATH=$PATH:/usr/local/go/bin; go run /home/scc/work/src/github.com/sarsanaee/GoWorkloadGenerator/myserver.go &"
 
 
 sleep 2
