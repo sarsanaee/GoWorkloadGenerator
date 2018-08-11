@@ -8,6 +8,7 @@ import (
 	mrand "math/rand"
 	"net"
 	"os"
+	"runtime"
 	"strconv"
 	"time"
 )
@@ -19,6 +20,8 @@ func nextTime(rate float64) float64 {
 }
 
 func main() {
+
+	runtime.GOMAXPROCS(2) // set maximum number of processes to be used by this applications
 
 	args := os.Args[1:]
 	rate_int, err := strconv.Atoi(args[0])
