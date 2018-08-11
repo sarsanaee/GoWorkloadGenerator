@@ -17,13 +17,15 @@ func nextTime(rate float64) float64 {
 	return -1 * math.Log(1.0-mrand.Float64()) / rate
 }
 
-func Main(rate_int int) {
+func Main(cmd_rate_int int, cmd_port string) {
 
 	//runtime.GOMAXPROCS(2) // set maximum number of processes to be used by this applications
 
 	//var rate float64 = float64(rate_int)
 
-	rate := float64(rate_int)
+	rate := float64(cmd_rate_int)
+
+	port = cmd_port
 
 	conn, err := net.Dial("tcp", port)
 	if err != nil {

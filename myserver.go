@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-var port = "0.0.0.0:9001"
+var port = ":9001"
 
 func echo(conn net.Conn) {
 	buf := make([]byte, 8) //len(message))
