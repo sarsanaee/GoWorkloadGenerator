@@ -8,7 +8,6 @@ import (
 	mrand "math/rand"
 	"net"
 	"os"
-	"strconv"
 	"time"
 )
 
@@ -18,13 +17,13 @@ func nextTime(rate float64) float64 {
 	return -1 * math.Log(1.0-mrand.Float64()) / rate
 }
 
-func Main() {
+func Main(rate_int int) {
 
 	//runtime.GOMAXPROCS(2) // set maximum number of processes to be used by this applications
 
-	args := os.Args[1:]
-	rate_int, err := strconv.Atoi(args[0])
-	var rate float64 = float64(rate_int)
+	//var rate float64 = float64(rate_int)
+
+	rate := float64(rate_int)
 
 	conn, err := net.Dial("tcp", port)
 	if err != nil {
