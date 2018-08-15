@@ -17,7 +17,7 @@ mkdir $result_path/$rate
 pkill myclient
 ssh alireza@$server_ip "pkill app"
 sleep 2
-ssh -f alireza@$server_ip "export GOPATH=$HOME/work; export PATH=$PATH:/usr/local/go/bin; go run $GOPATH/src/github.com/sarsanaee/GoWorkloadGenerator/myserver.go &"
+ssh -f alireza@$server_ip "export GOPATH=$HOME/work; export PATH=$PATH:/usr/local/go/bin; go run $GOPATH/src/github.com/sarsanaee/GoWorkloadGenerator/app.go -type server &"
 
 sleep 2
 
