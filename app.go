@@ -118,6 +118,7 @@ func client(cmdRateInt float64, serverIP string, cmdPort string) {
 		for {
 			if !syncFlag {
 				myPrint(latency)
+				break
 			}
 
 			_, err := io.ReadFull(conn, buf)
