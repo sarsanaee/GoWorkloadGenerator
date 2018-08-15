@@ -113,9 +113,9 @@ func client(cmdRateInt float64, serverIP string, cmdPort string) {
 			if err != nil {
 				break
 			}
-			// int_message := int64(binary.LittleEndian.Uint64(buf))
-			// t2 := time.Unix(0, int_message)
-			// fmt.Println((time.Now().UnixNano() - t2.UnixNano()) / 1000)
+			int_message := int64(binary.LittleEndian.Uint64(buf))
+			t2 := time.Unix(0, int_message)
+			fmt.Println((time.Now().UnixNano() - t2.UnixNano()) / 1000)
 			atomic.AddInt64(&total_rcv, 1)
 		}
 		return
