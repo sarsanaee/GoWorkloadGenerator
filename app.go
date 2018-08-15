@@ -47,7 +47,7 @@ func main() {
 		t1 := time.Now()
 
 		for i := 0; i < clientSize; i++ {
-			go client(cmdRateInt, cmdPort)
+			go client(cmdRateInt, serverIP, cmdPort)
 		}
 		// <-make(chan bool) // infinite wait.
 		<-time.After(time.Second * time.Duration(expTime))
@@ -80,11 +80,11 @@ func server(cmdPort string, serverIP string) {
 	}
 }
 
-func client(cmdRateInt float64, cmdPort string) {
+func client(cmdRateInt float64, serverIP string, cmdPort string) {
 
 	latency := ""
 
-	conn, err := net.Dial("tcp", cmdPort)
+	conn, err := net.Dial("tcp", serverIP+cmdPort)
 	if err != nil {
 		log.Println("ERROR", err)
 		os.Exit(1)

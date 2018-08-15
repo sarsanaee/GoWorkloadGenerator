@@ -27,6 +27,6 @@ go run app.go -size $size -ip $server_ip -type client -rate $rate -time $time > 
 
 ssh alireza@$server_ip "pkill app"
 
-sleep(2)
+sleep 2
 
 
