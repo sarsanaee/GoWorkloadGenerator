@@ -10,6 +10,7 @@ import (
 	"math/rand"
 	"net"
 	"os"
+	"strconv"
 	"sync/atomic"
 	"time"
 
@@ -17,6 +18,7 @@ import (
 )
 
 var total_rcv int64
+var syncFlag bool
 
 func main() {
 
@@ -42,6 +44,7 @@ func main() {
 		server(cmdPort, serverIP)
 
 	} else if t == "client" {
+		syncFlag = true
 		t1 := time.Now()
 
 		for i := 0; i < clientSize; i++ {
@@ -51,7 +54,8 @@ func main() {
 		<-time.After(time.Second * time.Duration(expTime))
 		fmt.Println("total exchanged:", total_rcv, "\nthroughput:",
 			total_rcv*1000000000/time.Now().Sub(t1).Nanoseconds(), "call/sec")
-
+		syncFlag = false
+		<-time.After(time.Second * time.Duration(expTime))
 	} else if t == "client_ratelimit" {
 		bucket := ratelimit.NewBucketWithQuantum(time.Second, int64(cmdRateInt), int64(cmdRateInt))
 		for i := 0; i < clientSize; i++ {
@@ -95,8 +99,6 @@ func server(cmdPort string, serverIP string) {
 
 func client(cmdRateInt float64, serverIP string, cmdPort string) {
 
-	latency := ""
-
 	conn, err := net.Dial("tcp", serverIP+cmdPort)
 	if err != nil {
 		log.Println("ERROR", err)
@@ -104,18 +106,31 @@ func client(cmdRateInt float64, serverIP string, cmdPort string) {
 	}
 
 	defer conn.Close()
-	defer fmt.Println(latency)
 
 	go func(conn net.Conn) {
+
+		var rtt int64
+		var latency string
+
+		myPrint(latency)
+
 		buf := make([]byte, 8)
 		for {
+			if !syncFlag {
+				myPrint(latency)
+			}
+
 			_, err := io.ReadFull(conn, buf)
 			if err != nil {
 				break
 			}
 			int_message := int64(binary.LittleEndian.Uint64(buf))
 			t2 := time.Unix(0, int_message)
-			fmt.Println((time.Now().UnixNano() - t2.UnixNano()) / 1000)
+			rtt = (time.Now().UnixNano() - t2.UnixNano()) / 1000
+			latency = latency + strconv.FormatInt(rtt, 10) + "\n"
+			//fmt.Print(latency)
+
+			//fmt.Println((time.Now().UnixNano() - t2.UnixNano()) / 1000)
 			atomic.AddInt64(&total_rcv, 1)
 		}
 		return
@@ -178,4 +193,8 @@ func clientRateLimite(bucket *ratelimit.Bucket, cmdPort string) {
 
 func nextTime(rate float64) float64 {
 	return -1 * math.Log(1.0-rand.Float64()) / rate
+}
+
+func myPrint(latency_series string) {
+	fmt.Print(latency_series)
 }
