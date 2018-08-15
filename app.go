@@ -39,8 +39,6 @@ func main() {
 	// fmt.Println(t, cmdRateInt, cmdPort, clientSize)
 
 	if t == "server" {
-		fmt.Println("alireza")
-
 		server(cmdPort, serverIP)
 
 	} else if t == "client" {
@@ -65,6 +63,20 @@ func main() {
 	}
 }
 
+func echo(conn net.Conn) {
+	buf := make([]byte, 8) //len(message))
+
+	for {
+		_, err := io.ReadFull(conn, buf)
+		if err != nil {
+			return
+		}
+		//fmt.Println("recv")
+		time.Sleep(time.Microsecond * 10)
+		conn.Write(buf)
+	}
+}
+
 func server(cmdPort string, serverIP string) {
 	ln, err := net.Listen("tcp", serverIP+cmdPort)
 	if err != nil {
@@ -76,7 +88,8 @@ func server(cmdPort string, serverIP string) {
 		if err != nil {
 			panic(err)
 		}
-		go io.Copy(conn, conn)
+		//go io.Copy(conn, conn)
+		go echo(conn)
 	}
 }
 
