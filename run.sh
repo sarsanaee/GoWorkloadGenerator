@@ -15,9 +15,9 @@ rate=$5
 mkdir $result_path/$rate
 
 pkill myclient
-ssh alireza@server_ip "pkill app"
+ssh alireza@$server_ip "pkill app"
 sleep 2
-ssh -f alireza@server_ip "export GOPATH=$HOME/work; export PATH=$PATH:/usr/local/go/bin; go run $GOPATH/src/github.com/sarsanaee/GoWorkloadGenerator/myserver.go &"
+ssh -f alireza@$server_ip "export GOPATH=$HOME/work; export PATH=$PATH:/usr/local/go/bin; go run $GOPATH/src/github.com/sarsanaee/GoWorkloadGenerator/myserver.go &"
 
 sleep 2
 
@@ -25,7 +25,7 @@ sleep 2
 
 go run app.go -size $size -ip $server_ip -type client -rate $rate -time $time > $result_path/$rate/$size.log 
 
-ssh scc@$server_ip "pkill app"
+ssh alireza@$server_ip "pkill app"
 
 sleep(2)
 
